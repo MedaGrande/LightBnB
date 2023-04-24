@@ -6,8 +6,8 @@ A simple multi-page Airbnb clone that uses a server side javascript to display t
 1. [Create](https://github.com/lighthouse-labs/LightBnB_WebApp) a new repository using this repository as a template.
 2. Clone your repository onto your local device.
 3. Install dependencies using the `npm install` command.
-3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
-4. Go to <http://localhost:8080/> in your browser.
+3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:3000/>.
+4. Go to <http://localhost:3000/> in your browser.
 
 ## Dependencies
 
