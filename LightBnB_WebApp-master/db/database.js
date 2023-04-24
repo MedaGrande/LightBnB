@@ -9,8 +9,6 @@ const pool = new Pool({
   database: 'lightbnb'
 });
 
-// pool.query(`SELECT title FROM properties LIMIT 10;`).then(response => { console.log(response) })
-
 
 /// Users
 
@@ -73,7 +71,6 @@ const getAllReservations = function (guest_id, limit = 10) {
   LIMIT $2`, [guest_id, limit]
   )
     .then((result) => {
-    console.log(result.rows);
     return result.rows;
     })
     .catch((err) => {
@@ -89,82 +86,67 @@ const getAllReservations = function (guest_id, limit = 10) {
  * @param {*} limit The number of results to return.
  * @return {Promise<[{}]>}  A promise to the properties.
  */
-// const getAllProperties = function (options, limit = 10) {
-//   const limitedProperties = {};
-//   for (let i = 1; i <= limit; i++) {
-//     limitedProperties[i] = properties[i];
-//   }
-//   return Promise.resolve(limitedProperties);
-// };
-// const getAllProperties = (options, limit = 10) => {
 
-//  return pool
-//     .query(`SELECT * FROM properties LIMIT $1`, [limit])
-//     .then((result) => {
-//       return result.rows;
-//     })
-//   .catch((err) => {
-//     console.log(err.message);
-//   });
-// };
 const getAllProperties = function (options, limit = 10) {
-  // 1
+  //create an empty array for queryParams
   const queryParams = [];
-  // 2
+
+  //create the basic query string
   let queryString = `
   SELECT properties.*, avg(property_reviews.rating) as average_rating
   FROM properties
   JOIN property_reviews ON properties.id = property_id
+  GROUP BY properties.id
   `;
 
-  // 3
+  //A variable to check if all the filter conditions are entered
+  let conditionStarted = false;
+  
+  //Implement the filter conditions
   if (options.city) {
     queryParams.push(`%${options.city}%`);
-    queryString += `WHERE city LIKE $${queryParams.length} `;
+    queryString += `HAVING city LIKE $${queryParams.length} `;
+    conditionStarted = true;
   }
 
   if (options.owner_id) {
+
+    const condition = conditionStarted ? ' AND' : 'HAVING';
+    
     queryParams.push(`%${options.owner_id}%`);
-    queryString += `WHERE owner_id LIKE $${queryParams.length} `;
+    queryString += `${condition} owner_id LIKE $${queryParams.length} `;
+    conditionStarted = true;
   }
 
   if (options.minimum_price_per_night && options.maximum_price_per_night) {
-    if (!options.city) {
-      
-      queryParams.push(Number(`${options.minimum_price_per_night}`));
-      queryString += `WHERE cost_per_night > $${queryParams.length} `;
-      queryParams.push(Number(`${options.maximum_price_per_night}`));
-      queryString += ` AND cost_per_night < $${queryParams.length}`;
-    }
-    else {
-      queryParams.push(Number(`${options.minimum_price_per_night}`));
-      queryString += `AND (cost_per_night > $${queryParams.length} `;
-      queryParams.push(Number(`${options.maximum_price_per_night}`));
-      queryString += ` AND cost_per_night < $${queryParams.length})`;
-    }
+    
+    const condition = conditionStarted ? ' AND' : 'HAVING';
+
+    queryParams.push(Number(`${options.minimum_price_per_night}`));
+    queryString += `${condition} cost_per_night > $${queryParams.length} `;
+
+    queryParams.push(Number(`${options.maximum_price_per_night}`));
+    queryString += ` AND cost_per_night < $${queryParams.length}`;
+    
+    conditionStarted = true;
   }
 
   if (options.minimum_rating) {
+
+    const condition = conditionStarted ? ' AND' : 'HAVING';
+    
     queryParams.push(Number(`${options.minimum_rating}`));
-    queryString += `AND AVG(property_reviews.rating) LIKE $${queryParams.length} `;
+    queryString += `${condition} AVG(property_reviews.rating) >= $${queryParams.length}`;
   }
 
-  // 4
+  // Create the last part of the query string
   queryParams.push(limit);
   queryString += `
-  GROUP BY properties.id
   ORDER BY cost_per_night
   LIMIT $${queryParams.length};
   `;
-
   
-  // 5
-  console.log(queryString, queryParams);
-
-  // 6
   return pool.query(queryString, queryParams).then((res) => {
-    // console.log('result', res.rows);
-    // console.log('res', res);
     return res.rows
   });
 };
@@ -186,7 +168,6 @@ const addProperty = function (property) {
     .query(query)
     .then(res => res.property)
     .catch(e => console.error(e.stack))
-  // return Promise.resolve(property);
 };
 
 module.exports = {
@@ -197,10 +178,5 @@ module.exports = {
   getAllProperties,
   addProperty,
 };
-  // SELECT properties.*, avg(property_reviews.rating) as average_rating
-  // FROM properties
-  // JOIN property_reviews ON properties.id = property_id
-  // WHERE city LIKE '%Toronto%' 
-  // GROUP BY properties.id
-  // ORDER BY cost_per_night
-  // LIMIT 20;
+  
+  
