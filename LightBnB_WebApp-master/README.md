@@ -1,4 +1,24 @@
 # LightBnB
+A simple multi-page Airbnb clone that uses a server side javascript to display the information from queries to web pages via SQL queries.
+
+## Getting Started
+
+1. [Create](https://github.com/lighthouse-labs/LightBnB_WebApp) a new repository using this repository as a template.
+2. Clone your repository onto your local device.
+3. Install dependencies using the `npm install` command.
+3. Start the web server using the `npm run local` command. The app will be served at <http://localhost:8080/>.
+4. Go to <http://localhost:8080/> in your browser.
+
+## Dependencies
+
+- bcrypt 3.0.6 
+- cookie-session 1.3.3 
+- express 4.17.1
+- nodemon 1.19.1
+- pg 8.10.0
+
+
+## Screenshots
 
 ## Project Structure
 
