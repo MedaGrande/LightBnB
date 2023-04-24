@@ -19,6 +19,12 @@ A simple multi-page Airbnb clone that uses a server side javascript to display t
 
 
 ## Screenshots
+![Screenshot of the homepage](https://github.com/MedaGrande/LightBnB/blob/main/LightBnB_WebApp-master/docs/Homepage.png)
+![Screenshot of the login page](https://github.com/MedaGrande/LightBnB/blob/main/LightBnB_WebApp-master/docs/Login%20form.png)
+![Screenshot of the sign up page](https://github.com/MedaGrande/LightBnB/blob/main/LightBnB_WebApp-master/docs/Sign%20up%20form.png)
+![Screenshot of the search page](https://github.com/MedaGrande/LightBnB/blob/main/LightBnB_WebApp-master/docs/Search%20form.png)
+![Screenshot of a search result](https://github.com/MedaGrande/LightBnB/blob/main/LightBnB_WebApp-master/docs/A%20result%20of%20a%20search%20with%20city%20name%2C%20price%20and%20rate.png)
+
 
 ## Project Structure
 
